@@ -16,3 +16,22 @@ img{
     height: 50%;
     width: 50%;
 }
+
+@media (max-width: 1024px){
+    img{
+        height: 50%;
+        width:  50%;
+    }
+}
+@media (max-width: 768px){
+    img{
+        height: 35%;
+        width:  35%;
+    }
+}
+@media (max-width: 480px){
+    img{
+        height: 20%;
+        width:  20%;
+    }
+}
