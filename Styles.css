@@ -1,4 +1,9 @@
 body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: justify;
     background-color: #fff3f3;
     font-family: Roboto, sans-serif;
 }
@@ -17,10 +22,25 @@ img{
     width: 50%;
 }
 
-@media (max-width: 1024px){
+.social-buttons{
+    gap: 25px;
+}
+.btn{
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ccc;
+    border-radius: 100%;
+    font-size: 25px;
+}
+
+@media (max-width: 3000px){
     img{
         height: 50%;
         width:  50%;
+    }
+    body{
+        width: 1000px;
+        margin-left: 25%;
     }
 }
 @media (max-width: 768px){
