@@ -78,25 +78,67 @@ form.addEventListener("submit", function (e) {
   e.preventDefault();
 
   let allValid = true;
-  let data = "";
+  let datos = {};
 
   for (let field in fields) {
     const input = document.getElementById(field);
     const errorDiv = document.getElementById("error-" + field);
     const value = input.value.trim();
     const valid = fields[field].validator(value);
+
     if (!valid) {
       errorDiv.textContent = fields[field].errorMsg;
       allValid = false;
     }
-    data += `${field}: ${value}\n`;
+
+    datos[field] = value;
   }
 
   if (allValid) {
-    alert("Formulario enviado con éxito:\n\n" + data);
-    modal.style.display = "none";
-    form.reset();
+    enviarDatosAlServidor(datos);
   } else {
     alert("Hay errores en el formulario. Revisa los campos marcados.");
   }
 });
+
+function enviarDatosAlServidor(datos) {
+  fetch('https://jsonplaceholder.typicode.com/posts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(datos)
+  })
+    .then(response => {
+      if (!response.ok) throw new Error('Error al enviar los datos');
+      return response.json();
+    })
+    .then(data => {
+      manejarExitoEnvio(datos); // Guarda en localStorage y cierra modal
+    })
+    .catch(error => {
+      manejarErrorEnvio(error.message);
+    });
+}
+
+function manejarExitoEnvio(datos) {
+  localStorage.setItem('datosFormulario', JSON.stringify(datos));
+  alert('Datos enviados correctamente.');
+  modal.style.display = 'none';
+  form.reset();
+}
+
+function manejarErrorEnvio(errorMsg) {
+  alert('Error en el envío: ' + errorMsg);
+}
+
+window.onload = () => {
+  const datosGuardados = localStorage.getItem('datosFormulario');
+  if (datosGuardados) {
+    const datos = JSON.parse(datosGuardados);
+    for (let field in datos) {
+      const input = document.getElementById(field);
+      if (input) input.value = datos[field];
+    }
+  }
+};
